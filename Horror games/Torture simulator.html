@@ -1,0 +1,1090 @@
+Enable desktop notifications for Gmail.
+   OK  No thanks
+1 of 64
+(no subject)
+Inbox
+
+Conner Morrison
+Attachments
+6:03 AM (0 minutes ago)
+to me
+
+bb
+
+This electronic message, including any attachments, constitutes information that may be privileged and confidential and is expressly for the use of the intended addressee(s) only. If you are not the intended recipient(s) of this email or have received this email in error, please notify the sender immediately and promptly destroy any record of this email. Any dissemination, copying or use of the information contained in this email or any attachment by anyone other than the intended recipient(s) is strictly prohibited.
+
+ One attachment
+  •  Scanned by Gmail
+<html><head><base href="https://nightmare-simulator.example.com/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nightmare Simulator: Torture Chamber</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.18.0/matter.min.js"></script>
+<style>
+body {
+margin: 0;
+padding: 0;
+display: flex;
+justify-content: center;
+align-items: center;
+height: 100vh;
+background-color: #000000;
+overflow: hidden;
+font-family: 'Creepster', cursive;
+user-select: none;
+color: #8B0000;
+}
+canvas {
+border: none;
+}
+#controls {
+position: absolute;
+top: 10px;
+left: 10px;
+background-color: rgba(50, 0, 0, 0.7);
+padding: 10px;
+border-radius: 5px;
+border: 2px solid #8B0000;
+transition: opacity 0.3s ease;
+}
+button {
+margin: 5px;
+padding: 5px 10px;
+cursor: pointer;
+background-color: #2B0000;
+color: #FF0000;
+border: 1px solid #8B0000;
+font-family: 'Creepster', cursive;
+transition: all 0.3s;
+}
+button:hover {
+background-color: #8B0000;
+color: #000000;
+transform: scale(1.1);
+}
+@keyframes pulse {
+0% { opacity: 0.5; }
+50% { opacity: 1; }
+100% { opacity: 0.5; }
+}
+#bloodOverlay {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+pointer-events: none;
+background: url('https://example.com/blood-splatter.png') no-repeat center center;
+background-size: cover;
+opacity: 0.3;
+z-index: 1000;
+}
+#ambientAudio {
+display: none;
+}
+#toggleInterface {
+position: absolute;
+top: 10px;
+right: 10px;
+z-index: 1001;
+}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<div id="bloodOverlay"></div>
+<div id="controls">
+<button id="addVictim">Add Victim</button>
+<button id="addBonesaw">Add Bonesaw</button>
+<button id="addHook">Add Hook</button>
+<button id="addAcid">Add Acid</button>
+<button id="addTentacle">Add Tentacle</button>
+<button id="addNightmare">Summon Nightmare</button>
+<button id="addHangingBlade">Add Hanging Blade</button>
+<button id="addIronMaiden">Add Iron Maiden</button>
+<button id="addSpikedWheel">Add Spiked Wheel</button>
+<button id="addPendulum">Add Pendulum</button>
+<button id="addFirePit">Add Fire Pit</button>
+<button id="addElectricChair">Add Electric Chair</button>
+<button id="addPoisonDart">Add Poison Dart</button>
+</div>
+<button id="toggleInterface">Toggle Interface</button>
+<audio id="ambientAudio" loop>
+<source src="https://example.com/creepy-ambient.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+// Wait for the DOM to be fully loaded before initializing the game
+document.addEventListener('DOMContentLoaded', function() {
+const Engine = Matter.Engine,
+Render = Matter.Render,
+World = Matter.World,
+Bodies = Matter.Bodies,
+Constraint = Matter.Constraint,
+Mouse = Matter.Mouse,
+MouseConstraint = Matter.MouseConstraint,
+Composite = Matter.Composite,
+Vector = Matter.Vector,
+Body = Matter.Body,
+Vertices = Matter.Vertices;
+
+const engine = Engine.create();
+const world = engine.world;
+
+const canvas = document.getElementById('canvas');
+const render = Render.create({
+canvas: canvas,
+engine: engine,
+options: {
+width: window.innerWidth,
+height: window.innerHeight,
+wireframes: false,
+background: 'transparent'
+}
+});
+
+render.options.background = '#1A0000';
+
+function createVictim(x, y) {
+const head = Bodies.circle(x, y, 20, {
+friction: 0.1,
+restitution: 0.5,
+render: { fillStyle: '#FFDBAC' },
+label: 'head',
+bonesawAttachments: 0,
+hookAttachments: 0,
+acidAttachments: 0,
+tentacleAttachments: 0,
+nightmareAttachments: 0,
+isElectrified: false
+});
+const torso = Bodies.rectangle(x, y + 60, 40, 80, {
+friction: 0.1,
+restitution: 0.5,
+render: { fillStyle: '#8B0000' },
+label: 'torso',
+bonesawAttachments: 0,
+hookAttachments: 0,
+acidAttachments: 0,
+tentacleAttachments: 0,
+nightmareAttachments: 0,
+isElectrified: false
+});
+const leftArm = Bodies.rectangle(x - 30, y + 50, 20, 70, {
+friction: 0.1,
+restitution: 0.5,
+render: { fillStyle: '#FFDBAC' },
+label: 'leftArm',
+bonesawAttachments: 0,
+hookAttachments: 0,
+acidAttachments: 0,
+tentacleAttachments: 0,
+nightmareAttachments: 0,
+isElectrified: false
+});
+const rightArm = Bodies.rectangle(x + 30, y + 50, 20, 70, {
+friction: 0.1,
+restitution: 0.5,
+render: { fillStyle: '#FFDBAC' },
+label: 'rightArm',
+bonesawAttachments: 0,
+hookAttachments: 0,
+acidAttachments: 0,
+tentacleAttachments: 0,
+nightmareAttachments: 0,
+isElectrified: false
+});
+const leftLeg = Bodies.rectangle(x - 15, y + 120, 20, 80, {
+friction: 0.1,
+restitution: 0.5,
+render: { fillStyle: '#FFDBAC' },
+label: 'leftLeg',
+bonesawAttachments: 0,
+hookAttachments: 0,
+acidAttachments: 0,
+tentacleAttachments: 0,
+nightmareAttachments: 0,
+isElectrified: false
+});
+const rightLeg = Bodies.rectangle(x + 15, y + 120, 20, 80, {
+friction: 0.1,
+restitution: 0.5,
+render: { fillStyle: '#FFDBAC' },
+label: 'rightLeg',
+bonesawAttachments: 0,
+hookAttachments: 0,
+acidAttachments: 0,
+tentacleAttachments: 0,
+nightmareAttachments: 0,
+isElectrified: false
+});
+
+const neckToHead = Constraint.create({
+bodyA: torso,
+bodyB: head,
+pointA: { x: 0, y: -40 },
+pointB: { x: 0, y: 20 },
+stiffness: 0.8,
+render: { visible: true, strokeStyle: '#8B0000' }
+});
+
+const leftShoulderToTorso = Constraint.create({
+bodyA: leftArm,
+bodyB: torso,
+pointA: { x: 0, y: -35 },
+pointB: { x: -20, y: -30 },
+stiffness: 0.8,
+render: { visible: true, strokeStyle: '#8B0000' }
+});
+
+const rightShoulderToTorso = Constraint.create({
+bodyA: rightArm,
+bodyB: torso,
+pointA: { x: 0, y: -35 },
+pointB: { x: 20, y: -30 },
+stiffness: 0.8,
+render: { visible: true, strokeStyle: '#8B0000' }
+});
+
+const leftHipToTorso = Constraint.create({
+bodyA: leftLeg,
+bodyB: torso,
+pointA: { x: 0, y: -40 },
+pointB: { x: -15, y: 40 },
+stiffness: 0.8,
+render: { visible: true, strokeStyle: '#8B0000' }
+});
+
+const rightHipToTorso = Constraint.create({
+bodyA: rightLeg,
+bodyB: torso,
+pointA: { x: 0, y: -40 },
+pointB: { x: 15, y: 40 },
+stiffness: 0.8,
+render: { visible: true, strokeStyle: '#8B0000' }
+});
+
+const victim = Composite.create({
+bodies: [head, torso, leftArm, rightArm, leftLeg, rightLeg],
+constraints: [neckToHead, leftShoulderToTorso, rightShoulderToTorso, leftHipToTorso, rightHipToTorso]
+});
+
+World.add(world, victim);
+return victim;
+}
+
+const victim = createVictim(window.innerWidth / 2, 100);
+
+const ground = Bodies.rectangle(window.innerWidth / 2, window.innerHeight - 10, window.innerWidth, 20, {
+isStatic: true,
+render: { fillStyle: '#2B0000' },
+label: 'ground'
+});
+const wallThickness = 50;
+const leftWall = Bodies.rectangle(0 - wallThickness / 2, window.innerHeight / 2, wallThickness, window.innerHeight, {
+isStatic: true,
+render: { fillStyle: '#2B0000' },
+label: 'wall'
+});
+const rightWall = Bodies.rectangle(window.innerWidth + wallThickness / 2, window.innerHeight / 2, wallThickness, window.innerHeight, {
+isStatic: true,
+render: { fillStyle: '#2B0000' },
+label: 'wall'
+});
+const topWall = Bodies.rectangle(window.innerWidth / 2, 0 - wallThickness / 2, window.innerWidth, wallThickness, {
+isStatic: true,
+render: { fillStyle: '#2B0000' },
+label: 'wall'
+});
+World.add(world, [ground, leftWall, rightWall, topWall]);
+
+const mouse = Mouse.create(render.canvas);
+const mouseConstraint = MouseConstraint.create(engine, {
+mouse: mouse,
+constraint: {
+stiffness: 0.2,
+render: {
+visible: false
+}
+}
+});
+
+World.add(world, mouseConstraint);
+render.mouse = mouse;
+
+function createBonesaw(x, y) {
+const bonesaw = Bodies.circle(x, y, 30, {
+render: {
+fillStyle: '#AAAAAA',
+strokeStyle: '#8B0000',
+lineWidth: 3
+},
+label: 'bonesaw'
+});
+World.add(world, bonesaw);
+
+Matter.Events.on(engine, 'collisionStart', (event) => {
+const pairs = event.pairs;
+for (let i = 0; i < pairs.length; i++) {
+const pair = pairs[i];
+if (pair.bodyA === bonesaw || pair.bodyB === bonesaw) {
+const victim = pair.bodyA === bonesaw ? pair.bodyB : pair.bodyA;
+if (isVictimPart(victim)) {
+if (victim.parent && victim.parent.constraints) {
+const constraintsToRemove = victim.parent.constraints.filter(c =>
+(c.bodyA === victim || c.bodyB === victim) && Math.random() < 0.7
+);
+constraintsToRemove.forEach(c => {
+Composite.remove(victim.parent, c);
+createBloodParticles(victim.position);
+});
+
+// Chance to split the victim in half
+if (Math.random() < 0.5) {
+splitVictimInHalf(victim);
+}
+}
+}
+}
+}
+});
+}
+
+function splitVictimInHalf(victimPart) {
+if (victimPart.parent) {
+const upperBodies = [];
+const lowerBodies = [];
+
+victimPart.parent.bodies.forEach(body => {
+if (['head', 'torso', 'leftArm', 'rightArm'].includes(body.label)) {
+upperBodies.push(body);
+} else {
+lowerBodies.push(body);
+}
+});
+
+// Remove all constraints
+victimPart.parent.constraints.forEach(c => {
+Composite.remove(victimPart.parent, c);
+});
+
+// Create new composites for upper and lower body
+const upperBody = Composite.create({ bodies: upperBodies });
+const lowerBody = Composite.create({ bodies: lowerBodies });
+
+// Remove the original composite and add the new ones
+World.remove(world, victimPart.parent);
+World.add(world, [upperBody, lowerBody]);
+
+createBloodParticles(victimPart.position);
+}
+}
+
+let lastHookedVictim = null;
+
+function createHook(x, y) {
+const hook = Bodies.rectangle(x, y, 10, 60, {
+render: {
+fillStyle: '#AAAAAA'
+},
+label: 'hook'
+});
+World.add(world, hook);
+
+const chain = Constraint.create({
+pointA: { x: x, y: 0 },
+bodyB: hook,
+pointB: { x: 0, y: -30 },
+stiffness: 0.1,
+render: {
+visible: true,
+lineWidth: 2,
+strokeStyle: '#AAAAAA'
+}
+});
+World.add(world, chain);
+
+Matter.Events.on(engine, 'collisionStart', (event) => {
+const pairs = event.pairs;
+for (let i = 0; i < pairs.length; i++) {
+const pair = pairs[i];
+if (pair.bodyA === hook || pair.bodyB === hook) {
+const victim = pair.bodyA === hook ? pair.bodyB : pair.bodyA;
+if (isVictimPart(victim) && victim !== lastHookedVictim && victim.hookAttachments < 3) {
+const newConstraint = Constraint.create({
+bodyA: hook,
+bodyB: victim,
+pointA: { x: 0, y: 30 },
+pointB: { x: 0, y: 0 },
+stiffness: 0.5,
+render: {
+visible: true,
+lineWidth: 2,
+strokeStyle: '#8B0000'
+}
+});
+World.add(world, newConstraint);
+createBloodParticles(victim.position);
+lastHookedVictim = victim;
+victim.hookAttachments++;
+}
+}
+}
+});
+}
+
+function createAcid(x, y) {
+const acid = Bodies.rectangle(x, y, 100, 20, {
+isStatic: true,
+isSensor: true,
+render: {
+fillStyle: '#00FF00',
+opacity: 0.5
+},
+label: 'acid'
+});
+World.add(world, acid);
+
+Matter.Events.on(engine, 'collisionStart', (event) => {
+const pairs = event.pairs;
+for (let i = 0; i < pairs.length; i++) {
+const pair = pairs[i];
+if (pair.bodyA === acid || pair.bodyB === acid) {
+const victim = pair.bodyA === acid ? pair.bodyB : pair.bodyA;
+if (isVictimPart(victim) && victim.acidAttachments < 3) {
+Matter.Body.scale(victim, 0.99, 0.99);
+createAcidParticles(victim.position);
+victim.acidAttachments++;
+}
+}
+}
+});
+}
+
+function createTentacle(x, y) {
+const segments = 10;
+const segmentLength = 20;
+let previousBody = null;
+const tentacleBodies = [];
+
+for (let i = 0; i < segments; i++) {
+const segment = Bodies.rectangle(x, y + i * segmentLength, 10, segmentLength, {
+collisionFilter: { group: Body.nextGroup(true) },
+render: {
+fillStyle: '#4A0E4E'
+},
+label: 'tentacle'
+});
+tentacleBodies.push(segment);
+
+if (previousBody) {
+const constraint = Constraint.create({
+bodyA: previousBody,
+bodyB: segment,
+pointA: { x: 0, y: segmentLength / 2 },
+pointB: { x: 0, y: -segmentLength / 2 },
+stiffness: 0.8,
+render: {
+visible: true,
+lineWidth: 2,
+strokeStyle: '#4A0E4E'
+}
+});
+World.add(world, constraint);
+} else {
+const fixedPoint = Constraint.create({
+pointA: { x: x, y: y },
+bodyB: segment,
+pointB: { x: 0, y: -segmentLength / 2 },
+stiffness: 0.8,
+render: {
+visible: true,
+lineWidth: 2,
+strokeStyle: '#4A0E4E'
+}
+});
+World.add(world, fixedPoint);
+}
+
+previousBody = segment;
+}
+
+World.add(world, tentacleBodies);
+
+Matter.Events.on(engine, 'beforeUpdate', (event) => {
+const time = event.timestamp;
+tentacleBodies.forEach((segment, index) => {
+Body.applyForce(segment, segment.position, {
+x: Math.sin(time * 0.002 + index * 0.3) * 0.00005,
+y: Math.cos(time * 0.002 + index * 0.3) * 0.00005
+});
+});
+});
+
+Matter.Events.on(engine, 'collisionStart', (event) => {
+const pairs = event.pairs;
+for (let i = 0; i < pairs.length; i++) {
+const pair = pairs[i];
+if (pair.bodyA.label === 'tentacle' || pair.bodyB.label === 'tentacle') {
+const tentacle = pair.bodyA.label === 'tentacle' ? pair.bodyA : pair.bodyB;
+const victim = pair.bodyA.label === 'tentacle' ? pair.bodyB : pair.bodyA;
+if (isVictimPart(victim) && victim.tentacleAttachments < 3) {
+const newConstraint = Constraint.create({
+bodyA: tentacle,
+bodyB: victim,
+stiffness: 0.2,
+render: {
+visible: true,
+lineWidth: 2,
+strokeStyle: '#4A0E4E'
+}
+});
+World.add(world, newConstraint);
+victim.tentacleAttachments++;
+}
+}
+}
+});
+}
+
+function createNightmare(x, y) {
+const nightmare = Bodies.circle(x, y, 40, {
+render: {
+fillStyle: '#000000',
+strokeStyle: '#FF0000',
+lineWidth: 3
+},
+label: 'nightmare'
+});
+World.add(world, nightmare);
+
+Matter.Events.on(engine, 'beforeUpdate', (event) => {
+const victims = Composite.allBodies(world).filter(body => isVictimPart(body));
+const closestVictim = victims.reduce((closest, victim) => {
+const distance = Vector.magnitude(Vector.sub(nightmare.position, victim.position));
+return distance < closest.distance ? { body: victim, distance: distance } : closest;
+}, { body: null, distance: Infinity }).body;
+
+if (closestVictim) {
+const force = Vector.mult(
+Vector.normalise(Vector.sub(closestVictim.position, nightmare.position)),
+0.0005
+);
+Body.applyForce(nightmare, nightmare.position, force);
+}
+});
+
+Matter.Events.on(engine, 'collisionStart', (event) => {
+const pairs = event.pairs;
+for (let i = 0; i < pairs.length; i++) {
+const pair = pairs[i];
+if (pair.bodyA === nightmare || pair.bodyB === nightmare) {
+const victim = pair.bodyA === nightmare ? pair.bodyB : pair.bodyA;
+if (isVictimPart(victim) && victim.nightmareAttachments < 3) {
+createNightmareParticles(victim.position);
+if (victim.parent && victim.parent.constraints) {
+victim.parent.constraints.forEach(c => Composite.remove(victim.parent, c));
+}
+World.remove(world, victim);
+victim.nightmareAttachments++;
+}
+}
+}
+});
+}
+
+function createHangingBlade(x, y) {
+const blade = Bodies.rectangle(x, y + window.innerHeight * 0.4, 100, 10, {
+render: {
+fillStyle: '#AAAAAA',
+strokeStyle: '#FF0000',
+lineWidth: 2
+},
+label: 'hangingBlade'
+});
+World.add(world, blade);
+
+const chain = Constraint.create({
+pointA: { x: x, y: 0 },
+bodyB: blade,
+pointB: { x: 0, y: -5 },
+stiffness: 0.1,
+length: window.innerHeight * 0.4,
+render: {
+visible: true,
+lineWidth: 2,
+strokeStyle: '#AAAAAA'
+}
+});
+World.add(world, chain);
+
+Matter.Events.on(engine, 'collisionStart', (event) => {
+const pairs = event.pairs;
+for (let i = 0; i < pairs.length; i++) {
+const pair = pairs[i];
+if (pair.bodyA === blade || pair.bodyB === blade) {
+const victim = pair.bodyA === blade ? pair.bodyB : pair.bodyA;
+if (isVictimPart(victim)) {
+createBloodParticles(victim.position);
+if (victim.parent && victim.parent.constraints) {
+const constraintToRemove = victim.parent.constraints[Math.floor(Math.random() * victim.parent.constraints.length)];
+Composite.remove(victim.parent, constraintToRemove);
+}
+
+// Chance to split the victim in half
+if (Math.random() < 0.5) {
+splitVictimInHalf(victim);
+}
+}
+}
+}
+});
+}
+
+function createIronMaiden(x, y) {
+const ironMaiden = Bodies.rectangle(x, y, 80, 200, {
+isStatic: true,
+render: {
+fillStyle: '#4A0000',
+strokeStyle: '#FF0000',
+lineWidth: 2
+},
+label: 'ironMaiden'
+});
+World.add(world, ironMaiden);
+
+const spikes = [];
+for (let i = 0; i < 10; i++) {
+const spike = Bodies.polygon(x + (Math.random() - 0.5) * 70, y + (Math.random() - 0.5) * 190, 3, 10, {
+isStatic: true,
+render: {
+fillStyle: '#FF0000'
+},
+label: 'spike'
+});
+spikes.push(spike);
+}
+World.add(world, spikes);
+
+Matter.Events.on(engine, 'collisionStart', (event) => {
+const pairs = event.pairs;
+for (let i = 0; i < pairs.length; i++) {
+const pair = pairs[i];
+if (pair.bodyA === ironMaiden || pair.bodyB === ironMaiden ||
+pair.bodyA.label === 'spike' || pair.bodyB.label === 'spike') {
+const victim = (pair.bodyA === ironMaiden || pair.bodyA.label === 'spike') ? pair.bodyB : pair.bodyA;
+if (isVictimPart(victim)) {
+createBloodParticles(victim.position);
+Matter.Body.scale(victim, 0.9, 0.9);
+}
+}
+}
+});
+}
+
+function createSpikedWheel(x, y) {
+const wheel = Bodies.circle(x, y, 80, {
+render: {
+fillStyle: '#4A0000',
+strokeStyle: '#FF0000',
+lineWidth: 2
+},
+label: 'spikedWheel'
+});
+World.add(world, wheel);
+
+const spikes = [];
+for (let i = 0; i < 8; i++) {
+const angle = (i / 8) * Math.PI * 2;
+const spike = Bodies.rectangle(
+x + Math.cos(angle) * 80,
+y + Math.sin(angle) * 80,
+20,
+10,
+{
+render: {
+fillStyle: '#FF0000'
+},
+label: 'spike'
+}
+);
+Body.rotate(spike, angle);
+spikes.push(spike);
+const constraint = Constraint.create({
+bodyA: wheel,
+bodyB: spike,
+pointA: { x: Math.cos(angle) * 80, y: Math.sin(angle) * 80 },
+pointB: { x: -10, y: 0 },
+stiffness: 1,
+length: 0
+});
+World.add(world, constraint);
+}
+World.add(world, spikes);
+
+Matter.Events.on(engine, 'beforeUpdate', (event) => {
+Body.rotate(wheel, 0.02);
+});
+
+Matter.Events.on(engine, 'collisionStart', (event) => {
+const pairs = event.pairs;
+for (let i = 0; i < pairs.length; i++) {
+const pair = pairs[i];
+if (pair.bodyA === wheel || pair.bodyB === wheel ||
+pair.bodyA.label === 'spike' || pair.bodyB.label === 'spike') {
+const victim = (pair.bodyA === wheel || pair.bodyA.label === 'spike') ? pair.bodyB : pair.bodyA;
+if (isVictimPart(victim)) {
+createBloodParticles(victim.position);
+if (victim.parent && victim.parent.constraints) {
+const constraintToRemove = victim.parent.constraints[Math.floor(Math.random() * victim.parent.constraints.length)];
+Composite.remove(victim.parent, constraintToRemove);
+}
+}
+}
+}
+});
+}
+
+function createPendulum(x, y) {
+const pendulumBlade = Bodies.trapezoid(x, y + window.innerHeight * 0.4, 120, 40, 0.3, {
+render: {
+fillStyle: '#AAAAAA',
+strokeStyle: '#FF0000',
+lineWidth: 2
+},
+label: 'pendulumBlade'
+});
+World.add(world, pendulumBlade);
+
+const chain = Constraint.create({
+pointA: { x: x, y: 0 },
+bodyB: pendulumBlade,
+pointB: { x: 0, y: -20 },
+stiffness: 0.05,
+length: window.innerHeight * 0.4,
+render: {
+visible: true,
+lineWidth: 2,
+strokeStyle: '#AAAAAA'
+}
+});
+World.add(world, chain);
+
+let swingDirection = 1;
+Matter.Events.on(engine, 'beforeUpdate', (event) => {
+const angle = pendulumBlade.angle;
+if (angle > 0.5) swingDirection = -1;
+if (angle < -0.5) swingDirection = 1;
+Body.setAngularVelocity(pendulumBlade, swingDirection * 0.01);
+});
+
+Matter.Events.on(engine, 'collisionStart', (event) => {
+const pairs = event.pairs;
+for (let i = 0; i < pairs.length; i++) {
+const pair = pairs[i];
+if (pair.bodyA === pendulumBlade || pair.bodyB === pendulumBlade) {
+const victim = pair.bodyA === pendulumBlade ? pair.bodyB : pair.bodyA;
+if (isVictimPart(victim)) {
+createBloodParticles(victim.position);
+if (victim.parent && victim.parent.constraints) {
+const constraintsToRemove = victim.parent.constraints.filter(c =>
+(c.bodyA === victim || c.bodyB === victim) && Math.random() < 0.5
+);
+constraintsToRemove.forEach(c => Composite.remove(victim.parent, c));
+}
+
+// Chance to split the victim in half
+if (Math.random() < 0.5) {
+splitVictimInHalf(victim);
+}
+}
+}
+}
+});
+}
+
+function createFirePit(x, y) {
+const firepit = Bodies.rectangle(x, y, 150, 20, {
+isStatic: true,
+render: {
+fillStyle: '#FF4500'
+},
+label: 'firepit'
+});
+World.add(world, firepit);
+
+Matter.Events.on(engine, 'beforeUpdate', (event) => {
+const time = event.timestamp;
+Composite.allBodies(world).forEach(body => {
+if (body.label === 'firepit') {
+const particlesCount = 3;
+for (let i = 0; i < particlesCount; i++) {
+createFireParticle(body.position.x + (Math.random() - 0.5) * 150, body.position.y);
+}
+}
+});
+});
+
+Matter.Events.on(engine, 'collisionStart', (event) => {
+const pairs = event.pairs;
+for (let i = 0; i < pairs.length; i++) {
+const pair = pairs[i];
+if (pair.bodyA === firepit || pair.bodyB === firepit) {
+const victim = pair.bodyA === firepit ? pair.bodyB : pair.bodyA;
+if (isVictimPart(victim)) {
+createFireParticles(victim.position);
+Matter.Body.scale(victim, 0.99, 0.99);
+victim.render.fillStyle = '#8B4513';
+}
+}
+}
+});
+}
+
+function createElectricChair(x, y) {
+const chair = Bodies.rectangle(x, y, 80, 100, {
+isStatic: true,
+render: {
+fillStyle: '#4169E1',
+strokeStyle: '#FFD700',
+lineWidth: 2
+},
+label: 'electricChair'
+});
+World.add(world, chair);
+
+Matter.Events.on(engine, 'collisionActive', (event) => {
+const pairs = event.pairs;
+for (let i = 0; i < pairs.length; i++) {
+const pair = pairs[i];
+if (pair.bodyA === chair || pair.bodyB === chair) {
+const victim = pair.bodyA === chair ? pair.bodyB : pair.bodyA;
+if (isVictimPart(victim) && !victim.isElectrified) {
+createElectricityParticles(victim.position);
+victim.isElectrified = true;
+victim.render.fillStyle = '#FFD700';
+setTimeout(() => {
+victim.isElectrified = false;
+victim.render.fillStyle = victim.originalColor || '#FFDBAC';
+}, 1000);
+}
+}
+}
+});
+
+Matter.Events.on(engine, 'collisionEnd', (event) => {
+const pairs = event.pairs;
+for (let i = 0; i < pairs.length; i++) {
+const pair = pairs[i];
+if (pair.bodyA === chair || pair.bodyB === chair) {
+const victim = pair.bodyA === chair ? pair.bodyB : pair.bodyA;
+if (isVictimPart(victim)) {
+victim.isElectrified = false;
+victim.render.fillStyle = victim.originalColor || '#FFDBAC';
+}
+}
+}
+});
+}
+
+function createPoisonDart(x, y) {
+const dart = Bodies.rectangle(x, y, 20, 5, {
+render: {
+fillStyle: '#800080'
+},
+label: 'poisonDart',
+frictionAir: 0.001
+});
+World.add(world, dart);
+
+Matter.Events.on(engine, 'beforeUpdate', (event) => {
+Body.setVelocity(dart, { x: 5, y: 0 });
+});
+
+Matter.Events.on(engine, 'collisionStart', (event) => {
+const pairs = event.pairs;
+for (let i = 0; i < pairs.length; i++) {
+const pair = pairs[i];
+if (pair.bodyA === dart || pair.bodyB === dart) {
+const victim = pair.bodyA === dart ? pair.bodyB : pair.bodyA;
+if (isVictimPart(victim)) {
+createPoisonParticles(victim.position);
+victim.render.fillStyle = '#800080';
+Matter.Body.scale(victim, 0.99, 0.99);
+World.remove(world, dart);
+} else if (victim.label === 'wall') {
+World.remove(world, dart);
+}
+}
+}
+});
+}
+
+function createFireParticle(x, y) {
+const particle = Bodies.circle(x, y, 2, {
+friction: 0,
+frictionAir: 0,
+render: {
+fillStyle: `rgba(${255}, ${Math.floor(Math.random() * 100)}, 0, ${Math.random()})`
+}
+});
+Body.setVelocity(particle, { x: (Math.random() - 0.5) * 2, y: -2 - Math.random() * 2 });
+World.add(world, particle);
+setTimeout(() => {
+World.remove(world, particle);
+}, 1000);
+}
+
+function createFireParticles(position) {
+for (let i = 0; i < 10; i++) {
+createFireParticle(position.x, position.y);
+}
+}
+
+function createElectricityParticles(position) {
+for (let i = 0; i < 10; i++) {
+const particle = Bodies.circle(
+position.x + (Math.random() - 0.5) * 40,
+position.y + (Math.random() - 0.5) * 40,
+2,
+{
+friction: 0,
+frictionAir: 0,
+render: {
+fillStyle: '#FFD700'
+}
+}
+);
+Body.setVelocity(particle, {
+x: (Math.random() - 0.5) * 5,
+y: (Math.random() - 0.5) * 5
+});
+World.add(world, particle);
+setTimeout(() => {
+World.remove(world, particle);
+}, 500);
+}
+}
+
+function createPoisonParticles(position) {
+for (let i = 0; i < 10; i++) {
+const particle = Bodies.circle(
+position.x + (Math.random() - 0.5) * 20,
+position.y + (Math.random() - 0.5) * 20,
+2,
+{
+friction: 0,
+frictionAir: 0,
+render: {
+fillStyle: '#800080'
+}
+}
+);
+Body.setVelocity(particle, {
+x: (Math.random() - 0.5) * 2,
+y: (Math.random() - 0.5) * 2
+});
+World.add(world, particle);
+setTimeout(() => {
+World.remove(world, particle);
+}, 1000);
+}
+}
+
+function createBloodParticles(position) {
+for (let i = 0; i < 10; i++) {
+const particle = Bodies.circle(position.x, position.y, 2, {
+friction: 0,
+frictionAir: 0,
+render: {
+fillStyle: '#8B0000'
+}
+});
+Body.setVelocity(particle, { x: (Math.random() - 0.5) * 5, y: (Math.random() - 0.5) * 5 });
+World.add(world, particle);
+setTimeout(() => {
+World.remove(world, particle);
+}, 1000);
+}
+}
+
+function createAcidParticles(position) {
+for (let i = 0; i < 10; i++) {
+const particle = Bodies.circle(position.x, position.y, 2, {
+friction: 0,
+frictionAir: 0,
+render: {
+fillStyle: '#00FF00'
+}
+});
+Body.setVelocity(particle, { x: (Math.random() - 0.5) * 3, y: (Math.random() - 0.5) * 3 });
+World.add(world, particle);
+setTimeout(() => {
+World.remove(world, particle);
+}, 1000);
+}
+}
+
+function createNightmareParticles(position) {
+for (let i = 0; i < 20; i++) {
+const particle = Bodies.circle(position.x, position.y, 2, {
+friction: 0,
+frictionAir: 0,
+render: {
+fillStyle: '#000000'
+}
+});
+Body.setVelocity(particle, { x: (Math.random() - 0.5) * 8, y: (Math.random() - 0.5) * 8 });
+World.add(world, particle);
+setTimeout(() => {
+World.remove(world, particle);
+}, 2000);
+}
+}
+
+function isVictimPart(body) {
+return ['head', 'torso', 'leftArm', 'rightArm', 'leftLeg', 'rightLeg'].includes(body.label);
+}
+
+document.getElementById('addVictim').addEventListener('click', () => createVictim(Math.random() * window.innerWidth, 100));
+document.getElementById('addBonesaw').addEventListener('click', () => createBonesaw(Math.random() * window.innerWidth, 100));
+document.getElementById('addHook').addEventListener('click', () => createHook(Math.random() * window.innerWidth, 100));
+document.getElementById('addAcid').addEventListener('click', () => createAcid(Math.random() * window.innerWidth, window.innerHeight - 50));
+document.getElementById('addTentacle').addEventListener('click', () => createTentacle(Math.random() * window.innerWidth, 0));
+document.getElementById('addNightmare').addEventListener('click', () => createNightmare(Math.random() * window.innerWidth, 100));
+document.getElementById('addHangingBlade').addEventListener('click', () => createHangingBlade(Math.random() * window.innerWidth, 0));
+document.getElementById('addIronMaiden').addEventListener('click', () => createIronMaiden(Math.random() * window.innerWidth, window.innerHeight - 100));
+document.getElementById('addSpikedWheel').addEventListener('click', () => createSpikedWheel(Math.random() * window.innerWidth, window.innerHeight - 100));
+document.getElementById('addPendulum').addEventListener('click', () => createPendulum(Math.random() * window.innerWidth, 0));
+document.getElementById('addFirePit').addEventListener('click', () => createFirePit(Math.random() * window.innerWidth, window.innerHeight - 10));
+document.getElementById('addElectricChair').addEventListener('click', () => createElectricChair(Math.random() * window.innerWidth, window.innerHeight - 50));
+document.getElementById('addPoisonDart').addEventListener('click', () => createPoisonDart(0, Math.random() * window.innerHeight));
+
+const toggleInterface = document.getElementById('toggleInterface');
+const controls = document.getElementById('controls');
+toggleInterface.addEventListener('click', () => {
+controls.style.display = controls.style.display === 'none' ? 'block' : 'none';
+});
+
+Engine.run(engine);
+Render.run(render);
+
+window.addEventListener('resize', () => {
+render.canvas.width = window.innerWidth;
+render.canvas.height = window.innerHeight;
+Matter.Body.setPosition(ground, Vector.create(window.innerWidth / 2, window.innerHeight - 10));
+Matter.Body.setPosition(leftWall, Vector.create(0 - wallThickness / 2, window.innerHeight / 2));
+Matter.Body.setPosition(rightWall, Vector.create(window.innerWidth + wallThickness / 2, window.innerHeight / 2));
+Matter.Body.setPosition(topWall, Vector.create(window.innerWidth / 2, 0 - wallThickness / 2));
+});
+
+const ambientAudio = document.getElementById('ambientAudio');
+ambientAudio.volume = 0.3;
+document.body.addEventListener('click', () => {
+ambientAudio.play();
+}, { once: true });
+});
+</script>
+</body>
+</html>
