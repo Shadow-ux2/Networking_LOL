@@ -7,10 +7,10 @@ I'm a passionate developer focusing on **JavaScript** and **Lua**, working on va
 
 ## Projects
 ### [Project 1: My website](https://sites.google.com/view/cyberplay-nexus/home)
-A fun and exciting multiplayer game where players battle it out in an arena.
+It's a website i made to play games 
 
-### [Project 2: Cyber Security Website](https://username.github.io)
-A website designed to teach others about cyber security concepts and how to stay safe online.
+### [Project 2: Cyber Security Website](https://example.com/)
+This is coming soon so for now it goes to example.com
 
 ## Skills
 - **JavaScript**
@@ -19,4 +19,4 @@ A website designed to teach others about cyber security concepts and how to stay
 - **Cyber Security**
 
 ## Contact Me
-Feel free to reach out to me on [GitHub](https://github.com/username) or via email at `youremail@example.com`.
+Feel free to reach out to me on [GitHub](https://github.com/Shadow-ux2) or talk/add me on discord 'shadow_lol125_92896'
