@@ -6,7 +6,7 @@ Hello! I'm **[Shadow]**, and this is my personal GitHub Page. I create projects 
 I'm a passionate developer focusing on **JavaScript** and **Lua**, working on various projects like Roblox games, websites, and tools. I'm constantly learning and growing my skills.
 
 ## Projects
-### [Project 1: My website]([https://sites.google.com/view/cyberplay-nexus/home])
+### [Project 1: My website](https://sites.google.com/view/cyberplay-nexus/home)
 A fun and exciting multiplayer game where players battle it out in an arena.
 
 ### [Project 2: Cyber Security Website](https://username.github.io)
